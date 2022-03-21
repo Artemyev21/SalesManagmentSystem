@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="BLL\Models\" />
+    <Folder Include="BLL\Exceptions\" />
+    <Folder Include="BLL\Services\Interfaces\" />
+    <Folder Include="Controllers\Response\" />
+    <Folder Include="Controllers\Request\" />
+    <Folder Include="DAL\Models\" />
+    <Folder Include="DAL\Interfaces\" />
+  </ItemGroup>
+
+</Project>
