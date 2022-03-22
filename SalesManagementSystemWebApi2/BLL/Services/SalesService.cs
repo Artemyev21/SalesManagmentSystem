@@ -69,17 +69,9 @@ namespace SalesManagementSystemWebApi2.BLL.Services
 
 
             //Обновляем таблицу ProvidedProducts                                   
-            int updateQuantity = productInSalePoint.ProductQuantity - model.Quantity;
-            try
-            {
-                _providedProductsRepository.Update(model.SalesPointId, model.ProductId, updateQuantity);
-            }
-
-            catch
-            {
-                throw new NotUpdateTableException("Данные не обновились");
-            }
-
+            int updateQuantity = productInSalePoint.ProductQuantity - model.Quantity;                        
+                _providedProductsRepository.Update(model.SalesPointId, model.ProductId, updateQuantity);                        
+            //NotUpdateTableException - удалить
 
             var product = _productRepository.Query(model.ProductId);
             var amount = model.Quantity * product.Price;//подсчет общей суммы
@@ -87,25 +79,14 @@ namespace SalesManagementSystemWebApi2.BLL.Services
             int saleId = 0;
 
 
-            //Добавляем данные в таблицу Sale  
-            try
-            {
-                saleId = _saleRepository.Create(date, model.SalesPointId, model.BuyerId, amount);
-            }
-            catch
-            {
-                throw new DataNonAddedException("Данные не добавились в Sale");
-            }
+            //Добавляем данные в таблицу Sale              
+                saleId = _saleRepository.Create(date, model.SalesPointId, model.BuyerId, amount);                        
+            //DataNonAddedException - удалить
+            
 
-            //Добавляем данные в таблицу SalesData            
-            try
-            {
-                _salesDataRepository.Create(saleId, model.ProductId, model.Quantity, amount);
-            }
-            catch
-            {
-                throw new DataNonAddedException("Данные не добавились в SalesData");
-            }
+            //Добавляем данные в таблицу SalesData                                    
+                _salesDataRepository.Create(saleId, model.ProductId, model.Quantity, amount);                        
+            
 
             ///Оформить продажу 
             SalesData salesData = new SalesData
