@@ -40,14 +40,29 @@ namespace SalesManagementSystemWebApi2.BLL.Services
             Product[] products;
             SalesPoint[] salesPoints;
 
+            PopulateBuyer();
             products = PopulateProduct();
             salesPoints = PopulateSalesPoint(products);
             PopulateProvidedProducts(salesPoints);
 
             return true;
-
         }
 
+        public void PopulateBuyer()
+        {
+            _buyerRepository.DeleteAll();
+
+            string[] arrayName = new string[] {
+                            "Oliver","Jack",
+                            "Harry","Jacob",
+                            "Charley","Thomas",
+                            "George", "Oscar" };
+
+            foreach (var name in arrayName)
+            {
+                _buyerRepository.Create(name);
+            }            
+        }
 
         public Sale BuyProducts(BuyProductsModel model)
         {
@@ -258,10 +273,8 @@ namespace SalesManagementSystemWebApi2.BLL.Services
         }
 
         public bool Test()
-        {
-            var res = _productRepository.Create("ASD", 34444);
-            return res;
-            //throw new NotImplementedException();            
+        {            
+            throw new NotImplementedException();            
         }
     }
 }

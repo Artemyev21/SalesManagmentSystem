@@ -42,7 +42,8 @@ namespace SalesManagementSystemWebApi2.DAL.Models
         {
             using (IDbConnection db = new SqlConnection(_connection))
             {
-                
+                var sqlQuery = $"truncate table Buyer";
+                db.Execute(sqlQuery);
             }
         }
     }
