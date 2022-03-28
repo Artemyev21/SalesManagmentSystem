@@ -34,6 +34,21 @@ namespace SalesManagementSystemWebApi2.BLL.Services
             _buyerRepository = buyerRepository;
         }
 
+
+        public bool PopulateDB()
+        {
+            Product[] products;
+            SalesPoint[] salesPoints;
+
+            products = PopulateProduct();
+            salesPoints = PopulateSalesPoint(products);
+            PopulateProvidedProducts(salesPoints);
+
+            return true;
+
+        }
+
+
         public Sale BuyProducts(BuyProductsModel model)
         {
             //Проверить что точка продажи существует.       
@@ -214,36 +229,32 @@ namespace SalesManagementSystemWebApi2.BLL.Services
                     {
                         ProductId = products[i].Id,
                         ProductQuantity = random.Next(20,100)
-                    }
-                    ); ;
+                    });
             }
 
             return providedProducts;        
         }
 
-        public void PopulateProvidedProductsTable(SalesPoint[] salesPoints)
+        public void PopulateProvidedProducts(SalesPoint[] salesPoints)
         {
             //Сначала удаляем все данные из таблицы ProvidedProducts
             _providedProductsRepository.DeleteAll();
 
             //Создаем список доступных к продаже продуктов в определенной точке продаж в таблице ProvidedProducts
-
-            //lenghtProvidedProduct - размера массива
-            int lenghtProvidedProduct = product.Length * salesPoints.Length;
-            var providedProducts = new ProvidedProduct[lenghtProvidedProduct];
-            int count = 0;
-            //Заполняем случайными данными providedProducts с помощью цикла
-            for (int i = 0; i < salesPoints.Length; i++)
+            foreach (var salesPoint in salesPoints)
             {
-                for (int j = 0; j < product.Length; j++)
+                var spId = salesPoint.Id + 1;
+                foreach (var product in salesPoint.ProvidedProducts)
                 {
-                    providedProducts[count] = new ProvidedProduct()
-                    {                        
-                        ProductId = product[random.Next(1, product.Length)].Id,
-                        ProductQuantity = random.Next(10, 500),                        
-                    };
+                    var pId = product.ProductId + 1;
+                    var pQuantity = product.ProductQuantity;
+                    bool isProvidedProduct = _providedProductsRepository.Create(spId, pId, pQuantity);
+                    if (!isProvidedProduct)
+                    {
+                        throw new ProvidedProductsException("Таблица ProvidedProducts не заполнена");
+                    }
                 }
-            }
+            }            
         }
 
         public bool Test()

@@ -17,7 +17,14 @@ namespace SalesManagementSystemWebApi2.DAL.Models
 
         public bool Create(int salesPointId, int productId, int productQuantity)
         {
-            throw new System.NotImplementedException();
+            using (IDbConnection db = new SqlConnection(_connection))
+            {
+                var sqlQuery = $"Insert Into ProvidedProducts(SalesPointID,ProductID,ProductQuantity) " +
+                               $"OUTPUT Inserted.SalesPointID " +
+                               $"Values({salesPointId},{productId},{productQuantity})";
+                var resQuery = db.Query<int>(sqlQuery);
+                return resQuery.Any();
+            }
         }
 
         public void DeleteAll()

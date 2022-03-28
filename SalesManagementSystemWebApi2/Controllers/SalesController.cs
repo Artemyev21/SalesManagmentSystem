@@ -15,10 +15,12 @@ namespace SalesManagementSystemWebApi2.Controllers
     {       
         private readonly ISalesService _salesService;
 
+
         public SalesController(ISalesService salesService)
         {
             _salesService = salesService;
         }
+
 
         [HttpPost("Test")]
         public bool Test()
@@ -26,16 +28,15 @@ namespace SalesManagementSystemWebApi2.Controllers
             return _salesService.Test();
         }
 
+
         [HttpPost("populate-database")]
         public ActionResult<bool> PopulateDB()
-        {                       
-            Product[] products;
-            SalesPoint[] salesPoints;
+        {
+            bool result = false;
+
             try
             {
-                products = _salesService.PopulateProduct();
-                salesPoints = _salesService.PopulateSalesPoint(products);
-                _salesService.PopulateProvidedProducts(products,salesPoints);
+                result = _salesService.PopulateDB();
             }            
             catch (ProductTableException ex)
             {
@@ -49,7 +50,7 @@ namespace SalesManagementSystemWebApi2.Controllers
             {
                 return StatusCode(400, ex.Message);
             }
-            return true;
+            return result;
         }
 
 
@@ -95,15 +96,7 @@ namespace SalesManagementSystemWebApi2.Controllers
             catch (NotEnoughQuantityException ex)
             {
                 return StatusCode(400, ex.Message);
-            }
-            catch (NotUpdateTableException ex)
-            {
-                return StatusCode(400, ex.Message);
-            }
-            catch (DataNonAddedException ex)
-            {
-                return StatusCode(400, ex.Message);
-            }
+            }            
         }   
     }
 }

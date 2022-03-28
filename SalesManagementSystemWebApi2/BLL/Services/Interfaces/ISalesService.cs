@@ -8,10 +8,6 @@ namespace SalesManagementSystemWebApi2.BLL.Services.Interfaces
 
         bool Test();
 
-        Product[] PopulateProduct();
-
-        SalesPoint[] PopulateSalesPoint(Product[] products);
-
-        void PopulateProvidedProducts(Product[] product, SalesPoint[] salesPoints);        
+        bool PopulateDB();
     }
 }
