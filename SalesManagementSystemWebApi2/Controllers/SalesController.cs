@@ -32,7 +32,7 @@ namespace SalesManagementSystemWebApi2.Controllers
         [HttpPost("populate-database")]
         public ActionResult<bool> PopulateDB()
         {
-            bool result = false;
+            bool result;
 
             try
             {
